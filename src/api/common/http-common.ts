@@ -1,8 +1,9 @@
 import axios from "axios";
 
-// TODO: replace baseURL w/ environment variable
+const BASE_API_URL = import.meta.env.VITE_BASE_API_URL
+
 export default axios.create({
-  baseURL: "http://localhost:3000",
+  baseURL: BASE_API_URL || 'http://localhost:3000',
   headers: {
     "Content-type": "application/json"
   }
