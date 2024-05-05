@@ -35,19 +35,17 @@ function NoteCard({ id, value }: Note) {
     window.location.pathname = '/'
   };
 
-  const handleStatusChange = e => {
-    // this.props.tasksStore.updateTaskStatus(this.props.id, e.target.value);
-  };
-
     return (
       <CardContainer>
-        <Card>
+        <Card
+           onClick={() => window.location.pathname = `/notes/${id}`}
+        >
           <CardContent>
             {value}
           </CardContent>
           <CardActions style={{ padding: '14px' }} disableSpacing>
             <Grid
-              justify="space-between" // Add it here :)
+              justifyContent="space-between" // Add it here :)
               container 
             >
               <Grid item>

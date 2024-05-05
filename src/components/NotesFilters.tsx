@@ -1,12 +1,8 @@
-import React, { Component, useState } from 'react';
+// import React, { Component, useState } from 'react';
 import { Grid, FormControl, Select, MenuItem, TextField, InputAdornment } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import styled from 'styled-components';
 
-// import { inject } from 'mobx-react';
-import { Subject } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
-import { Note } from '../types';
 
 const FiltersContainer = styled.div`
   margin-top: 20px;
@@ -32,7 +28,7 @@ function NoteFilters({ search, setSearch }: props) {
     return (
       <FiltersContainer>
         <Grid
-          justify="space-between" // Add it here :)
+          justifyContent="space-between"
           container
         >
           <Grid item>

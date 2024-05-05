@@ -1,7 +1,12 @@
-import apiClient from "./http-common";
+import apiClient from "../http-common";
 
 export const getNotes = async () => {
     const res = await apiClient.get('notes')    
+    return res.data
+}
+
+export const getNote = async (id: string) => {
+    const res = await apiClient.get(`notes/${id}`)    
     return res.data
 }
 

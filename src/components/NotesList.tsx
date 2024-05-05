@@ -5,11 +5,9 @@ import {
   import styled from 'styled-components';
   import { getNotes } from "./../api/notes";
   import NoteCard from './NoteCard'
-import { Key, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Note } from '../types';
 
-
-// export interface props { id?: null | undefined; value?: string }
 
 const EmptyTasksPlaceholder = styled.p`
   color: #edf4ff;
@@ -37,14 +35,14 @@ function NotesList({ search }: props) {
 
     useEffect(() => {
       if (search) {
-        const filteredNotes = notes.filter((note: Note) => note.value.includes(search))
+        const filteredNotes = data.filter((note: Note) => note.value.includes(search))
         console.log('filteredNotes: ', filteredNotes)
         setNotes(filteredNotes)
       }
     },[search])
 
     if (isLoading || !data) {
-    return <div>Loading...</div>
+      return <div>Loading...</div>
     }
 
     if (data.length === 0) {
