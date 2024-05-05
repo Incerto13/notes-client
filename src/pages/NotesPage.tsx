@@ -48,7 +48,7 @@ function NotesPage() {
       <CreateButtonContainer>
         <Fab
           variant="extended"
-          onClick={() => window.location.pathname = '/create-note'}
+          onClick={() => window.location.pathname = '/notes/new'}
         >
           <AddIcon />
           Create Note

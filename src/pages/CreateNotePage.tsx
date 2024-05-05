@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import { FormControl, Button } from '@material-ui/core';
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -35,6 +35,9 @@ function CreateNotePage() {
     resolver: zodResolver(NoteSchema), // Apply the zodResolver
   });
 
+  const [apiErrorMsg, setApiErrorMsg] = useState<string>('')
+  const [displayApiErrorMsg, setDisplayApiErrorMsg] = useState(false)
+
   const onSubmit = async (note: NoteFormData) => {
     try {
       const response = await createNote(note.value)
@@ -58,47 +61,64 @@ function CreateNotePage() {
           message: errors[fieldWithError],
         });
       }
-    } catch (error) {
-      console.error(error)
-      alert("Submitting form failed!");
+
+      window.location.pathname = '/'; // back to homepage after successful submission
+
+    } catch (error: any) {
+      handleApiError(error)
     }
-  window.location.pathname = '/'; // back to homepage after successful submission
 };
 
+  // TODO: put this in custom hook that displays the Error modal
+  const handleApiError = (error: any) => {
+    console.error(error)
+    const message = error?.response?.data?.message
+    setApiErrorMsg(message)
+  };
+  useEffect(() => {
+    if (apiErrorMsg) {
+      setDisplayApiErrorMsg(true)
+    }
+  })
+
     return (
-      <FormWrapper>
-        <FormContainer>
-          <h1>Create a new note</h1>
+    <>
+      { displayApiErrorMsg && <ErrorMessage message={apiErrorMsg} /> }
 
-          {/* { errorMessage && <ErrorMessage message={errorMessage} />} */}
+        <FormWrapper>
+          <FormContainer>
+            <h1>Create a new note</h1>
 
-          <FormControl fullWidth>
-          </FormControl>
-     
-          <form onSubmit={handleSubmit(onSubmit)}>
+            {/* { errorMessage && <ErrorMessage message={errorMessage} />} */}
+
             <FormControl fullWidth>
-              <FormField
-                name="value"
-                placeholder="Type Note here"
-                type="text"
-                register={register}
-                error={errors.value}
-              />
             </FormControl>
+      
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <FormControl fullWidth>
+                <FormField
+                  name="value"
+                  placeholder="Type Note here"
+                  type="text"
+                  register={register}
+                  error={errors.value}
+                />
+              </FormControl>
 
-            <Button
-              type="submit"
-              style={{ marginTop: '10px' }}
-              fullWidth
-              variant="contained"
-              color="primary"
-            >
-              Save
-            </Button>
-          </form>
+              <Button
+                type="submit"
+                style={{ marginTop: '10px' }}
+                fullWidth
+                variant="contained"
+                color="primary"
+              >
+                Save
+              </Button>
+            </form>
 
-        </FormContainer>
-      </FormWrapper>
+          </FormContainer>
+        </FormWrapper>
+      </>
     );
 }
 
