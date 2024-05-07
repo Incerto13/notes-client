@@ -1,10 +1,11 @@
 import { useState } from 'react'
-import { Button, Fab } from '@material-ui/core';
+import { Fab } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import styled from 'styled-components';
 import NotesFilters from '../components/NotesFilters';
 import NotesList from '../components/NotesList';
 import '../App.css'
+import LabelsList from '../components/LabelsList';
 
 const TasksWrapper = styled.div`
   width: 100%;
@@ -38,46 +39,39 @@ const TasksContainer = styled.div`
 `;
 
 
-
-function NotesPage() {
+function LabelsPage() {
   const [search, setSearch] = useState('')
-  const [selectedLabelId, setSelectedLabelId] = useState('')
 
   return (
-    <>
     <TasksWrapper>
     <TasksHeader>
-      <Title>Solace Notes</Title>
+      <Title>Solace Labels</Title>
 
       <CreateButtonContainer>
         <Fab
           variant="extended"
-          onClick={() => window.location.pathname = '/notes/new'}
+          onClick={() => window.location.pathname = '/labels/new'}
         >
           <AddIcon />
-          Create Note
+          Create Label
         </Fab>
+
         <Fab 
           style={{ marginLeft: '15px' }}
           variant="extended"
-          onClick={() => window.location.pathname = '/labels'}
+          onClick={() => window.location.pathname = '/'}
         >
-          Labels
+          Notes
         </Fab>
+
       </CreateButtonContainer> 
     </TasksHeader>
 
-    <NotesFilters  
-      search={search} setSearch={setSearch}
-      selectedLabelId={selectedLabelId} setSelectedLabelId={setSelectedLabelId}
-    />
-
     <TasksContainer>
-      <NotesList search={search} selectedLabelId={selectedLabelId} />
+      <LabelsList search={search} />
     </TasksContainer>
   </TasksWrapper>
-  </>
   )
 }
 
-export default NotesPage
+export default LabelsPage

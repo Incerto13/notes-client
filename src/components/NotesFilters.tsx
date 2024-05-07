@@ -1,7 +1,11 @@
 // import React, { Component, useState } from 'react';
 import { Grid, FormControl, Select, MenuItem, TextField, InputAdornment } from '@material-ui/core';
+import { useQuery } from 'react-query';
 import SearchIcon from '@material-ui/icons/Search';
 import styled from 'styled-components';
+import { getLabels } from '../api/labels';
+import { useEffect, useState } from 'react';
+import { Label } from '../types';
 
 
 const FiltersContainer = styled.div`
@@ -17,12 +21,38 @@ const ControlContainer = styled.div`
 interface props {
   search: string
   setSearch: (val: string) => void
+  selectedLabelId: string
+  setSelectedLabelId: (val: string) => void
 }
 
-function NoteFilters({ search, setSearch }: props) {
+function NoteFilters({ search, setSearch, selectedLabelId, setSelectedLabelId }: props) {
+
+  const { data, isLoading } = useQuery('labels', async () => {
+    return await getLabels()
+  })
+
+  const [labels, setLabels] = useState([])
+    
+  useEffect(() => {
+    if (data) {
+      console.log('labels: ', data)
+      setLabels(data)
+    }
+  })
 
   const handleSearchTermChange = (e: any) => {
     setSearch(e.target.value)
+    setSelectedLabelId('') // only one filter at a time
+  }
+
+  const handleSelectedLabelChange = (e: any) => {
+    console.log(e.target.value)
+    setSelectedLabelId(e.target.value)
+    setSearch('') // only one filter at a time
+  }
+
+  if (isLoading || !data) {
+    return <div>Loading...</div>
   }
 
     return (
@@ -50,22 +80,26 @@ function NoteFilters({ search, setSearch }: props) {
             </ControlContainer>
           </Grid>
 
-          {/* <Grid item>
+          <Grid item>
             <ControlContainer>
               <FormControl style={{ width: '220px' }}>
                 <Select
-                //   value={this.state.status}
-                //   onChange={this.handleStatusFilterChange}
+                  value={selectedLabelId}
+                  onChange={handleSelectedLabelChange}
                   displayEmpty
                 >
-                  <MenuItem value="">No status filter</MenuItem>
-                  <MenuItem value={'OPEN'}>Open</MenuItem>
-                  <MenuItem value={'IN_PROGRESS'}>In Progress</MenuItem>
-                  <MenuItem value={'DONE'}>Done</MenuItem>
+                  <MenuItem value={''}></MenuItem>
+                  {labels?.map((label: Label) => {
+                      return (
+                        <MenuItem key={label.id} value={label.id}>
+                          {label.name}
+                        </MenuItem>
+                      )
+                  })}
                 </Select>
               </FormControl>
             </ControlContainer>
-          </Grid> */}
+          </Grid>
         </Grid>
       </FiltersContainer>
     );

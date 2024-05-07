@@ -1,14 +1,15 @@
-import React, { Component, useState } from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { FormControl, Button } from '@material-ui/core';
+import { FormControl, Button, Select, MenuItem, OutlinedInput, Chip, Box, InputLabel, ListItemText, Checkbox } from '@material-ui/core';
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { NoteFormData, NoteSchema, ValidFieldNames } from "../types";
-import FormField from "../components/FormField";
+import { Label, Note, NoteFormData, NoteLabel, NoteSchema, ValidNoteFieldNames } from "../types";
+import { NoteFormField } from "../components/FormFields";
 import styled from 'styled-components';
 import ErrorMessage from '../components/ErrorMessage';
-import { createNote, getNote } from '../api/notes';
+import { getNote, updateNote } from '../api/notes';
 import { useQuery } from 'react-query';
+import { getLabels } from '../api/labels';
 
 const FormWrapper = styled.div`
   width: 100vw;
@@ -29,10 +30,32 @@ const FormContainer = styled.div`
 function EditNotePage() {
 
   const { id } = useParams();
+  const [apiErrorMsg, setApiErrorMsg] = useState<string>('')
+  const [displayApiErrorMsg, setDisplayApiErrorMsg] = useState(false)
 
-  const { data, isLoading } = useQuery('notes', async () => {
+  const getNoteQuery = useQuery('notes', async () => {
     return await getNote(id)
-})
+  })
+  const getLabelsQuery = useQuery('labels', async () => {
+    return await getLabels()
+  })
+
+  const [labels, setLabels] = useState<Label[]>([])
+  const [selectedLabelNames, setSelectedLabelNames] = useState([])
+  const [selectedLabelIds, setSelectedLabelIds] = useState<string[]>([])
+
+  useEffect(() => {
+    if (getLabelsQuery.data && getNoteQuery?.data) {
+      const noteLabelIds = getNoteQuery.data.labels?.map((noteLabel: NoteLabel) => noteLabel.labelId)
+      console.log('noteLabelIds: ',  noteLabelIds)
+      const preSelectedLabels = getLabelsQuery.data.filter((label: Label) => noteLabelIds.includes(label.id))
+      console.log('preSelectedLabels: ',  preSelectedLabels)
+      const preselectedLabelNames = preSelectedLabels.map((label: Label) => label.name) 
+
+      setLabels(getLabelsQuery.data)
+      setSelectedLabelNames(preselectedLabelNames)
+    }
+  },[getLabelsQuery.data, getNoteQuery.data])
   
   const {
     register,
@@ -43,14 +66,31 @@ function EditNotePage() {
     resolver: zodResolver(NoteSchema), // Apply the zodResolver
   });
 
+  const handleChangeLabels = (e: any) => {
+    const { value } = e.target
+
+    setSelectedLabelNames(
+      // On autofill we get a stringified value.
+      typeof value === 'string' ? value.split(',') : value,
+    );
+  }
+
+  useEffect(() => {
+    if (labels.length > 0) {
+      const selectedIds = labels.filter((label: Label) => selectedLabelNames.includes(label.name)).map((label: Label) => label.id)
+      setSelectedLabelIds(selectedIds)
+    }
+  },[selectedLabelNames])
+
 
   const onSubmit = async (note: NoteFormData) => {
     try {
-      const response = await createNote(note.value)
+
+      const response = await updateNote(id, note.value, selectedLabelIds)
       const { errors = {} } = response; // Destructure the 'errors' property from the response data
 
       // Define a mapping between server-side field names and their corresponding client-side names
-      const fieldErrorMapping: Record<string, ValidFieldNames> = {
+      const fieldErrorMapping: Record<string, ValidNoteFieldNames> = {
         value: "value",
       };
 
@@ -68,51 +108,90 @@ function EditNotePage() {
         });
       }
     } catch (error) {
-      console.error(error)
-      alert("Submitting form failed!"); // TODO: replace with Error Modal
+      handleApiError(error)
     }
   window.location.pathname = '/'; // back to homepage after successful submission
 };
 
-if (isLoading || !data) {
-  return <div>Loading...</div>
-}
+  // TODO: put this in custom hook that displays the Error modal
+  const handleApiError = (error: any) => {
+    console.error(error)
+    const message = error?.response?.data?.message
+    setApiErrorMsg(message)
+  };
+  useEffect(() => {
+    if (apiErrorMsg) {
+      setDisplayApiErrorMsg(true)
+    }
+  })
+
+  useEffect(() => {
+    console.log('selectedLabelIds: ', selectedLabelIds)
+    console.log('labels: ', labels)
+  })
+
+
+  if ((getNoteQuery.isLoading || getLabelsQuery.isLoading) || (!getNoteQuery.data  || !getLabelsQuery.data)) {
+    return <div>Loading...</div>
+  }
 
     return (
-      <FormWrapper>
-        <FormContainer>
-          <h1>Edit note</h1>
+      <>   
+        { displayApiErrorMsg && <ErrorMessage message={apiErrorMsg} /> }
+        
+        <FormWrapper>
+          <FormContainer>
+            <h1>Edit note</h1>
 
-          {/* { errorMessage && <ErrorMessage message={errorMessage} />} */}
-
-          <FormControl fullWidth>
-          </FormControl>
-     
-          <form onSubmit={handleSubmit(onSubmit)}>
             <FormControl fullWidth>
-              <FormField
-                name="value"
-                placeholder="Type Note here"
-                type="text"
-                defaultValue={data?.value}
-                register={register}
-                error={errors.value}
-              />
             </FormControl>
+      
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <FormControl fullWidth>
+                <NoteFormField
+                  name="value"
+                  placeholder="Type Note here"
+                  type="text"
+                  defaultValue={getNoteQuery.data?.value}
+                  register={register}
+                  error={errors.value}
+                />
+              </FormControl>
 
-            <Button
-              type="submit"
-              style={{ marginTop: '10px' }}
-              fullWidth
-              variant="contained"
-              color="primary"
-            >
-              Save
-            </Button>
-          </form>
+              <FormControl  fullWidth style={{ marginBottom: '50px' }}>
+                <InputLabel id="demo-multiple-chip-label">Labels</InputLabel>
+                <Select
+                  value={selectedLabelNames}
+                  onChange={handleChangeLabels}
+                  multiple
+                  input={<OutlinedInput label="Tag" />}
+                  renderValue={(selected: any) => selected.join(',  ')}
+                >
+                  {labels.map((label: Label) => label.name)?.map((name: string) => {
+                      return (
+                        <MenuItem key={name} value={name}>
+                          <Checkbox checked={selectedLabelNames.includes(name)} />  
+                          <ListItemText primary={name} />
+                        </MenuItem>
+                      )
+                  })}
+                </Select>
+              </FormControl>
 
-        </FormContainer>
-      </FormWrapper>
+              <Button
+                type="submit"
+                style={{ marginTop: '10px' }}
+                fullWidth
+                variant="contained"
+                color="primary"
+              >
+                Save
+              </Button>
+            </form>
+
+          </FormContainer>
+        </FormWrapper>
+      </>
     );
 }
 

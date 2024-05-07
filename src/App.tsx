@@ -5,6 +5,9 @@ import './App.css'
 import NotesPage from './pages/NotesPage';
 import CreateNotePage from './pages/CreateNotePage';
 import EditNotePage from './pages/EditNotePage';
+import LabelsPage from './pages/LabelsPage';
+import CreateLabelPage from './pages/CreateLabelPage';
+import EditLabelPage from './pages/EditLabelPage';
 
 function App() {
     return (
@@ -18,6 +21,15 @@ function App() {
             </Route>
             <Route exact path="/notes/:id">
                 <EditNotePage />
+            </Route>
+            <Route exact path="/labels">
+                <LabelsPage />
+            </Route>
+            <Route exact path="/labels/new">
+                <CreateLabelPage />
+            </Route>
+            <Route exact path="/labels/:id">
+                <EditLabelPage />
             </Route>
         </Switch>
       </Router>

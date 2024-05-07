@@ -10,13 +10,13 @@ export const getNote = async (id: string) => {
     return res.data
 }
 
-export const createNote = async (value: string) => {
-    const res = await apiClient.post('notes', { value })    
+export const createNote = async (value: string, labelIds: string[]) => {
+    const res = await apiClient.post('notes', { value, labelIds })    
     return res.data
 }
 
-export const updateNote = async (id: string, value: string) => {
-    const res = await apiClient.patch(`notes/${id}`, { value })    
+export const updateNote = async (id: string, value: string, labelIds: string[]) => {
+    const res = await apiClient.patch(`notes/${id}`, { value, labelIds })    
     return res.data
 }
 

@@ -1,12 +1,9 @@
-
-import {
-    useQuery,
-  } from 'react-query';
+import { useEffect, useState } from 'react';
+import { useQuery } from 'react-query';
   import styled from 'styled-components';
   import { getNotes } from "./../api/notes";
   import NoteCard from './NoteCard'
-import { useEffect, useState } from 'react';
-import { Note } from '../types';
+import { Note, NoteLabel } from '../types';
 
 
 const EmptyTasksPlaceholder = styled.p`
@@ -17,9 +14,10 @@ const EmptyTasksPlaceholder = styled.p`
 
 interface props {
   search?: string
+  selectedLabelId?: string
 }
 
-function NotesList({ search }: props) {
+function NotesList({ search, selectedLabelId }: props) {
 
     const { data, isLoading } = useQuery('notes', async () => {
         return await getNotes()
@@ -27,8 +25,7 @@ function NotesList({ search }: props) {
     const [notes, setNotes] = useState([])
     
     useEffect(() => {
-      if (data && !search) {
-        console.log('data: ', data)
+      if (data && !search && !selectedLabelId) {
         setNotes(data)
       }
     })
@@ -40,6 +37,18 @@ function NotesList({ search }: props) {
         setNotes(filteredNotes)
       }
     },[search])
+
+    useEffect(() => {
+      if (selectedLabelId) {
+        console.log('selectedLabelId: ', selectedLabelId)
+        const filteredNotes = data.filter((note: Note) => note.labels?.map((noteLabel: NoteLabel) => noteLabel.labelId).includes(selectedLabelId))   // .includes(selectedLabelId) // ?.map((noteLabel: NoteLabel) => noteLabel.labelId))// .includes(selectedLabelId)
+        console.log('data: ', data)
+        console.log('filteredNotes: ', filteredNotes)
+        if (filteredNotes) {
+          setNotes(filteredNotes)
+        }
+      }
+    },[selectedLabelId])
 
     if (isLoading || !data) {
       return <div>Loading...</div>

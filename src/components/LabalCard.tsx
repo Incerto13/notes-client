@@ -12,36 +12,27 @@ import {
 import DeleteIcon from '@material-ui/icons/Delete';
 import styled from 'styled-components';
 import { deleteNote, updateNote } from '../api/notes';
-import { Note } from '../types'
+import { Label, Note } from '../types'
+import { deleteLabel } from '../api/labels';
 
 const CardContainer = styled.div`
   margin-bottom: 20px;
 `;
 
-// const CardTitle = styled.h1`
-//   margin: 8px 0;
-//   font-size: 22px;
-// `;
+function LabelCard({ id, name }: Label) {
 
-function NoteCard({ id, value }: Note) {
-  // const [updatedValue, setUpdatedValue] = useState(value)
-
-  // const handleUpdateNote = async () => {
-  //   await updateNote(id, updatedValue)
-  // };
-
-  const handleDeleteNote = async () => {
-    await deleteNote(id)
-    window.location.pathname = '/'
+  const handleDeleteLabel = async () => {
+    await deleteLabel(id)
+    window.location.pathname = '/labels'
   };
 
     return (
       <CardContainer>
         <Card
-           onClick={() => window.location.pathname = `/notes/${id}`}
+           onClick={() => window.location.pathname = `/labels/${id}`}
         >
           <CardContent>
-            {value}
+            {name}
           </CardContent>
           <CardActions style={{ padding: '14px' }} disableSpacing>
             <Grid
@@ -49,7 +40,7 @@ function NoteCard({ id, value }: Note) {
               container 
             >
               <Grid item>
-                <IconButton onClick={handleDeleteNote}>
+                <IconButton onClick={handleDeleteLabel}>
                   <DeleteIcon color="error" />
                 </IconButton>
               </Grid>
@@ -60,4 +51,4 @@ function NoteCard({ id, value }: Note) {
     );
 }
 
-export default NoteCard;
+export default LabelCard;
