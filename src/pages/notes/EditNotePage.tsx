@@ -1,15 +1,15 @@
-import React, { Component, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { FormControl, Button, Select, MenuItem, OutlinedInput, Chip, Box, InputLabel, ListItemText, Checkbox } from '@material-ui/core';
+import { FormControl, Button, Select, MenuItem, OutlinedInput, InputLabel, ListItemText, Checkbox } from '@material-ui/core';
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Label, Note, NoteFormData, NoteLabel, NoteSchema, ValidNoteFieldNames } from "../types";
-import { NoteFormField } from "../components/FormFields";
-import styled from 'styled-components';
-import ErrorMessage from '../components/ErrorMessage';
-import { getNote, updateNote } from '../api/notes';
 import { useQuery } from 'react-query';
-import { getLabels } from '../api/labels';
+import styled from 'styled-components';
+import { Label,  NoteFormData, NoteLabel, NoteSchema, ValidNoteFieldNames } from "../../types";
+import { NoteFormField } from "../../components/common/FormFields";
+import ErrorMessage from '../../components/common/ErrorMessage';
+import { getNote, updateNote } from '../../api/notes';
+import { getLabels } from '../../api/labels';
 
 const FormWrapper = styled.div`
   width: 100vw;
@@ -47,9 +47,7 @@ function EditNotePage() {
   useEffect(() => {
     if (getLabelsQuery.data && getNoteQuery?.data) {
       const noteLabelIds = getNoteQuery.data.labels?.map((noteLabel: NoteLabel) => noteLabel.labelId)
-      console.log('noteLabelIds: ',  noteLabelIds)
       const preSelectedLabels = getLabelsQuery.data.filter((label: Label) => noteLabelIds.includes(label.id))
-      console.log('preSelectedLabels: ',  preSelectedLabels)
       const preselectedLabelNames = preSelectedLabels.map((label: Label) => label.name) 
 
       setLabels(getLabelsQuery.data)
@@ -124,12 +122,6 @@ function EditNotePage() {
       setDisplayApiErrorMsg(true)
     }
   })
-
-  useEffect(() => {
-    console.log('selectedLabelIds: ', selectedLabelIds)
-    console.log('labels: ', labels)
-  })
-
 
   if ((getNoteQuery.isLoading || getLabelsQuery.isLoading) || (!getNoteQuery.data  || !getLabelsQuery.data)) {
     return <div>Loading...</div>

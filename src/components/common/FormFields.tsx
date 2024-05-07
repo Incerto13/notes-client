@@ -1,4 +1,4 @@
-import { LabelFormFieldProps, NoteFormFieldProps } from "../types";
+import { LabelFormFieldProps, NoteFormFieldProps } from "../../types";
 import { TextField } from "@material-ui/core";
 
 export const NoteFormField: React.FC<NoteFormFieldProps> = ({

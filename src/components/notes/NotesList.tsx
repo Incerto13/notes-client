@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
   import styled from 'styled-components';
-  import { getNotes } from "./../api/notes";
+  import { getNotes } from "./../../api/notes";
   import NoteCard from './NoteCard'
-import { Note, NoteLabel } from '../types';
+import { Note, NoteLabel } from '../../types';
 
 
 const EmptyTasksPlaceholder = styled.p`
@@ -33,17 +33,13 @@ function NotesList({ search, selectedLabelId }: props) {
     useEffect(() => {
       if (search) {
         const filteredNotes = data.filter((note: Note) => note.value.includes(search))
-        console.log('filteredNotes: ', filteredNotes)
         setNotes(filteredNotes)
       }
     },[search])
 
     useEffect(() => {
       if (selectedLabelId) {
-        console.log('selectedLabelId: ', selectedLabelId)
-        const filteredNotes = data.filter((note: Note) => note.labels?.map((noteLabel: NoteLabel) => noteLabel.labelId).includes(selectedLabelId))   // .includes(selectedLabelId) // ?.map((noteLabel: NoteLabel) => noteLabel.labelId))// .includes(selectedLabelId)
-        console.log('data: ', data)
-        console.log('filteredNotes: ', filteredNotes)
+        const filteredNotes = data.filter((note: Note) => note.labels?.map((noteLabel: NoteLabel) => noteLabel.labelId).includes(selectedLabelId))
         if (filteredNotes) {
           setNotes(filteredNotes)
         }

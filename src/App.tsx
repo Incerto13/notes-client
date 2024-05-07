@@ -1,13 +1,11 @@
-import React, { Component, Fragment } from 'react';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import NotesPage from './pages/notes/NotesPage';
+import CreateNotePage from './pages/notes/CreateNotePage';
+import EditNotePage from './pages/notes/EditNotePage';
+import LabelsPage from './pages/labels/LabelsPage';
+import CreateLabelPage from './pages/labels/CreateLabelPage';
+import EditLabelPage from './pages/labels/EditLabelPage';
 import './App.css'
-
-import NotesPage from './pages/NotesPage';
-import CreateNotePage from './pages/CreateNotePage';
-import EditNotePage from './pages/EditNotePage';
-import LabelsPage from './pages/LabelsPage';
-import CreateLabelPage from './pages/CreateLabelPage';
-import EditLabelPage from './pages/EditLabelPage';
 
 function App() {
     return (

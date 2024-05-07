@@ -2,12 +2,11 @@ import { useState } from 'react'
 import { Fab } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import styled from 'styled-components';
-import NotesFilters from '../components/NotesFilters';
-import NotesList from '../components/NotesList';
-import '../App.css'
-import LabelsList from '../components/LabelsList';
+import NotesFilters from '../../components/notes/NotesFilters';
+import NotesList from '../../components/notes/NotesList';
+import '../../App.css'
 
-const TasksWrapper = styled.div`
+const Wrapper = styled.div`
   width: 100%;
   max-width: 860px;
   margin: auto;
@@ -15,7 +14,7 @@ const TasksWrapper = styled.div`
   box-sizing: border-box;
 `;
 
-const TasksHeader = styled.div`
+const Header = styled.div`
   display: flex;
   justify-content: center;
   border-bottom: 3px solid #757c87;
@@ -34,44 +33,51 @@ const CreateButtonContainer = styled.div`
   align-items: center;
 `;
 
-const TasksContainer = styled.div`
+const Container = styled.div`
   padding-top: 20px;
 `;
 
 
-function LabelsPage() {
+
+function NotesPage() {
   const [search, setSearch] = useState('')
+  const [selectedLabelId, setSelectedLabelId] = useState('')
 
   return (
-    <TasksWrapper>
-    <TasksHeader>
-      <Title>Solace Labels</Title>
+    <>
+    <Wrapper>
+    <Header>
+      <Title>Solace Notes</Title>
 
       <CreateButtonContainer>
         <Fab
           variant="extended"
-          onClick={() => window.location.pathname = '/labels/new'}
+          onClick={() => window.location.pathname = '/notes/new'}
         >
           <AddIcon />
-          Create Label
+          Create Note
         </Fab>
-
         <Fab 
           style={{ marginLeft: '15px' }}
           variant="extended"
-          onClick={() => window.location.pathname = '/'}
+          onClick={() => window.location.pathname = '/labels'}
         >
-          Notes
+          Labels
         </Fab>
-
       </CreateButtonContainer> 
-    </TasksHeader>
+    </Header>
 
-    <TasksContainer>
-      <LabelsList search={search} />
-    </TasksContainer>
-  </TasksWrapper>
+    <NotesFilters  
+      search={search} setSearch={setSearch}
+      selectedLabelId={selectedLabelId} setSelectedLabelId={setSelectedLabelId}
+    />
+
+    <Container>
+      <NotesList search={search} selectedLabelId={selectedLabelId} />
+    </Container>
+  </Wrapper>
+  </>
   )
 }
 
-export default LabelsPage
+export default NotesPage

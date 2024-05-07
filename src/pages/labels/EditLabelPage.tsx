@@ -1,15 +1,14 @@
-import React, { Component, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { FormControl, Button } from '@material-ui/core';
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { LabelFormData, LabelSchema, ValidLabelFieldNames } from "../types";
-import { LabelFormField } from "../components/FormFields";
+import { LabelFormData, LabelSchema, ValidLabelFieldNames } from "../../types";
+import { LabelFormField } from "../../components/common/FormFields";
 import styled from 'styled-components';
-import ErrorMessage from '../components/ErrorMessage';
-import { createNote, getNote, updateNote } from '../api/notes';
+import ErrorMessage from '../../components/common/ErrorMessage';
 import { useQuery } from 'react-query';
-import { getLabel, updateLabel } from '../api/labels';
+import { getLabel, updateLabel } from '../../api/labels';
 
 const FormWrapper = styled.div`
   width: 100vw;
@@ -94,8 +93,7 @@ function EditLabelPage() {
 
     return (
       <>
-      
-        { displayApiErrorMsg && <ErrorMessage message={apiErrorMsg} /> }
+      { displayApiErrorMsg && <ErrorMessage message={apiErrorMsg} /> }
         
         <FormWrapper>
           <FormContainer>

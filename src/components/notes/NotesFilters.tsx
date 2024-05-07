@@ -1,11 +1,10 @@
-// import React, { Component, useState } from 'react';
 import { Grid, FormControl, Select, MenuItem, TextField, InputAdornment } from '@material-ui/core';
 import { useQuery } from 'react-query';
 import SearchIcon from '@material-ui/icons/Search';
 import styled from 'styled-components';
-import { getLabels } from '../api/labels';
+import { getLabels } from '../../api/labels';
 import { useEffect, useState } from 'react';
-import { Label } from '../types';
+import { Label } from '../../types';
 
 
 const FiltersContainer = styled.div`
@@ -35,7 +34,6 @@ function NoteFilters({ search, setSearch, selectedLabelId, setSelectedLabelId }:
     
   useEffect(() => {
     if (data) {
-      console.log('labels: ', data)
       setLabels(data)
     }
   })
@@ -46,7 +44,6 @@ function NoteFilters({ search, setSearch, selectedLabelId, setSelectedLabelId }:
   }
 
   const handleSelectedLabelChange = (e: any) => {
-    console.log(e.target.value)
     setSelectedLabelId(e.target.value)
     setSearch('') // only one filter at a time
   }

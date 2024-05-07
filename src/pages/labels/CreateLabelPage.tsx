@@ -1,12 +1,12 @@
-import React, { Component, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FormControl, Button } from '@material-ui/core';
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { LabelFormData, LabelSchema, NoteSchema, ValidLabelFieldNames } from "../types";
-import { LabelFormField } from "../components/FormFields";
+import { LabelFormData, LabelSchema, ValidLabelFieldNames } from "../../types";
+import { LabelFormField } from "../../components/common/FormFields";
 import styled from 'styled-components';
-import ErrorMessage from '../components/ErrorMessage';
-import { createLabel } from '../api/labels';
+import ErrorMessage from '../../components/common/ErrorMessage';
+import { createLabel } from '../../api/labels';
 
 const FormWrapper = styled.div`
   width: 100vw;

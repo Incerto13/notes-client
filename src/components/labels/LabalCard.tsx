@@ -1,19 +1,14 @@
-import React, { Component, useState } from 'react';
 import {
   Card,
   CardContent,
   CardActions,
   IconButton,
-  MenuItem,
-  Select,
-  FormControl,
   Grid
 } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import styled from 'styled-components';
-import { deleteNote, updateNote } from '../api/notes';
-import { Label, Note } from '../types'
-import { deleteLabel } from '../api/labels';
+import { Label } from '../../types'
+import { deleteLabel } from '../../api/labels';
 
 const CardContainer = styled.div`
   margin-bottom: 20px;

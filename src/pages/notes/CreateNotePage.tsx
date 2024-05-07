@@ -2,13 +2,13 @@ import { useEffect, useState } from 'react';
 import { FormControl, Button, InputLabel, Checkbox, ListItemText, MenuItem, OutlinedInput, Select } from '@material-ui/core';
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Label, NoteFormData, NoteSchema, ValidNoteFieldNames } from "../types";
-import { NoteFormField } from "../components/FormFields";
-import styled from 'styled-components';
-import ErrorMessage from '../components/ErrorMessage';
-import { createNote } from '../api/notes';
 import { useQuery } from 'react-query';
-import { getLabels } from '../api/labels';
+import styled from 'styled-components';
+import { Label, NoteFormData, NoteSchema, ValidNoteFieldNames } from "../../types";
+import { NoteFormField } from "../../components/common/FormFields";
+import ErrorMessage from '../../components/common/ErrorMessage';
+import { createNote } from '../../api/notes';
+import { getLabels } from '../../api/labels';
 
 const FormWrapper = styled.div`
   width: 100vw;

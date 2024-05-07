@@ -1,34 +1,20 @@
-import React, { Component, useState } from 'react';
 import {
   Card,
   CardContent,
   CardActions,
   IconButton,
-  MenuItem,
-  Select,
-  FormControl,
   Grid
 } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import styled from 'styled-components';
-import { deleteNote, updateNote } from '../api/notes';
-import { Note } from '../types'
+import { deleteNote } from '../../api/notes';
+import { Note } from '../../types'
 
 const CardContainer = styled.div`
   margin-bottom: 20px;
 `;
 
-// const CardTitle = styled.h1`
-//   margin: 8px 0;
-//   font-size: 22px;
-// `;
-
 function NoteCard({ id, value }: Note) {
-  // const [updatedValue, setUpdatedValue] = useState(value)
-
-  // const handleUpdateNote = async () => {
-  //   await updateNote(id, updatedValue)
-  // };
 
   const handleDeleteNote = async () => {
     await deleteNote(id)

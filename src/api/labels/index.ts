@@ -11,7 +11,6 @@ export const getLabel = async (id: string) => {
 }
 
 export const createLabel = async (name: string) => {
-    console.log('name: ', name)
     const res = await apiClient.post('labels', { name })    
     return res.data
 }

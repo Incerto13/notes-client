@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
   import styled from 'styled-components';
-  import NoteCard from './NoteCard'
-import { Label } from '../types';
-import { getLabels } from '../api/labels';
+import { Label } from '../../types';
+import { getLabels } from '../../api/labels';
 import LabelCard from './LabalCard';
 
 
@@ -26,7 +25,6 @@ function LabelsList({ search }: props) {
     
     useEffect(() => {
       if (data && !search) {
-        console.log('data: ', data)
         setLabels(data)
       }
     })
@@ -34,7 +32,6 @@ function LabelsList({ search }: props) {
     useEffect(() => {
       if (search) {
         const filteredLabels = data.filter((label: Label) => label.name.includes(search))
-        console.log('filteredLabels: ', filteredLabels)
         setLabels(filteredLabels)
       }
     },[search])
