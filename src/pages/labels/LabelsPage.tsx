@@ -39,7 +39,7 @@ const Container = styled.div`
 
 
 function LabelsPage() {
-  const [search, setSearch] = useState('')
+  const [search] = useState('')
 
   return (
     <Wrapper>

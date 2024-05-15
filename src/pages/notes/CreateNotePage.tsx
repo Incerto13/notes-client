@@ -65,7 +65,7 @@ function CreateNotePage() {
 
   useEffect(() => {
     if (labels.length > 0) {
-      const selectedIds = labels.filter((label: Label) => selectedLabelNames.includes(label.name)).map((label: Label) => label.id)
+      const selectedIds = labels.filter((label: Label) => selectedLabelNames.includes(label.name as never)).map((label: Label) => label.id)
       setSelectedLabelIds(selectedIds)
     }
   },[selectedLabelNames])
@@ -147,7 +147,7 @@ function CreateNotePage() {
                   {labels.map((label: Label) => label.name)?.map((name: string) => {
                       return (
                         <MenuItem key={name} value={name}>
-                          <Checkbox checked={selectedLabelNames.includes(name)} />  
+                          <Checkbox checked={selectedLabelNames.includes(name as never  )} />  
                           <ListItemText primary={name} />
                         </MenuItem>
                       )

@@ -28,7 +28,7 @@ const FormContainer = styled.div`
 
 function EditLabelPage() {
 
-  const { id } = useParams();
+  const { id } = useParams<never>();
 
   const { data, isLoading } = useQuery('labels', async () => {
     return await getLabel(id)

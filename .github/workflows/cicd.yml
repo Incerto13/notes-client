@@ -1,0 +1,26 @@
+name: Build and Push Updated Image to Dockerhub
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ "main" ]
+
+env: 
+  DOCKER_USER: ${{ secrets.DOCKER_USERNAME }}
+  DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+  PROD_ENVS: ${{ secrets.PROD_ENVS }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Docker Login
+        run:
+          docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+      - name: Generate .env file
+        run: echo "$PROD_ENVS" > .env
+      - name: Build and Push Updated Image to Docker Hub
+        run: |
+            docker compose -f docker-compose.yml build
+            docker push incerto13/notes-client:latest
