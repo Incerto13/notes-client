@@ -2,12 +2,12 @@ import apiClient from "../common/http-common";
 
 export const getNotes = async () => {
     const res = await apiClient.get('notes')    
-    return res.data
+    return res?.data ?? []
 }
 
 export const getNote = async (id: string) => {
     const res = await apiClient.get(`notes/${id}`)    
-    return res.data
+    return res?.data
 }
 
 export const createNote = async (value: string, labelIds: string[]) => {
