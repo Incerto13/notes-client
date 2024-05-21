@@ -13,4 +13,6 @@ $ yarn
 $ yarn run dev
 ```
 
-- client app can be accessed on http://localhost:5173
+- client app can be accessed on http://localhost:8080
+
+- live version of demo app found here at https://solace.incertotech.com
